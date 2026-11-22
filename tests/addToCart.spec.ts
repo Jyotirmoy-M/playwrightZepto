@@ -3,6 +3,7 @@ import { testData } from '../test-data/testData';
 
 test('Zepto add to cart', async ({page, addToCart}) =>
 {
+    await page.goto('https://www.zepto.com/');
     console.log('Current URL:', page.url());
     console.log('Page title:', await page.title());
     console.log('Page HTML:', (await page.locator('body').innerText()).slice(0, 500));
