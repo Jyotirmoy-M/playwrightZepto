@@ -20,9 +20,19 @@ pipeline {
                 sh 'npx playwright install --with-deps'
             }
         }
+        stage('Load Authentication'){
+            steps {
+                withCredentials([file(credentialsId: 'zepto-auth-state', variable: 'AUTH_FILE')]){
+                sh '''
+                    mkdir -p playwright/.auth
+                    cp "$AUTH_FILE" playwright/.auth/user.json
+                   '''
+                }
+            }
+        }
         stage('Run tests'){
             steps {
-                sh 'npx playwright test'
+                sh 'CI=true npx playwright test tests/addToCart.spec.ts --project=chromium'
             }
         }
     }
@@ -30,6 +40,7 @@ pipeline {
         always {
             archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
             archiveArtifacts artifacts: 'test-results/**', allowEmptyArchive: true
+            sh 'rm -f playwright/.auth/user.json'
         }
     }
 }

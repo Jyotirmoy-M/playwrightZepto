@@ -46,7 +46,7 @@ export default defineConfig({
       testIgnore: /login.spec.ts/,
       use: { ...devices['Desktop Chrome'],
           storageState: 'playwright/.auth/user.json'},
-      dependencies: ['setup']
+      dependencies: process.env.CI ? []:['setup']
     },
     {
       name: 'firefox',
